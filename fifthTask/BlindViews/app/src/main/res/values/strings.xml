@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">BlindViews</string>
     <string name="hello_moon">Hello Moon!</string>
+    <string name="add_elements">Add some elements</string>
+    <string name="calculators">Show calculators</string>
 </resources>
