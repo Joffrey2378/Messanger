@@ -1,0 +1,6 @@
+1. Create Splash screen using https://medium.com/@pererikbergman/android-splash-screens-a1f44acb4fce
+2 Show progress 3-5 second
+Open "second Activity"
+Create TextView and Button programmatically 
+Add onClickListener for button and 
+If user click - > add more  items from you_layout.xml (using asynchronous layout inflation)
