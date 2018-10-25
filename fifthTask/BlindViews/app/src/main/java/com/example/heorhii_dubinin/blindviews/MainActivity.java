@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getApplicationContext());
+                final AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getApplicationContext());   //Asynchronic adding
                 asyncLayoutInflater.inflate(R.layout.custom_activity, linLayout, new AsyncLayoutInflater.OnInflateFinishedListener() {
                     @Override
-                    public void onInflateFinished(View view, int resid, ViewGroup parent) {
+                    public void onInflateFinished(View view, int resid, ViewGroup parent) {     //adding custom_activity in linLayout
                         parent.addView(view);
                     }
                 });

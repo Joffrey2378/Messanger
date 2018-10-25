@@ -3,4 +3,7 @@
     <string name="hello_moon">Hello Moon!</string>
     <string name="add_elements">Add some elements</string>
     <string name="calculators">Show calculators</string>
+    <string name="rainbow">7 Colors of the Rainbow: RED, ORANGE, YELLOW,  GREEN, BLUE, INDIGO, VIOLET.
+You can open calculator with: FrameLayout , LinearLayout, RelativeLayout.
+    </string>
 </resources>
