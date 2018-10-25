@@ -50,7 +50,7 @@ public class SecondActivity extends AppCompatActivity {
         spannableColor.setSpan(new ForegroundColorSpan(SPANABLE_VIOLET), 67, 73, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableColor);
 
-        final SpannableString spannableString = new SpannableString(textView.getText());
+        SpannableString spannableString = new SpannableString(textView.getText());
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -63,7 +63,9 @@ public class SecondActivity extends AppCompatActivity {
                 ds.setUnderlineText(true);
             }
         };
-        spannableString.setSpan(clickableSpan, 83, 93, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, 105, 117, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView.setText(spannableString);
 
         SpannableString ss = new SpannableString("Show me Splash please.");
         ClickableSpan clickableSpan2 = new ClickableSpan() {
@@ -75,11 +77,10 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setUnderlineText(false);
+                ds.setUnderlineText(true);
             }
         };
         ss.setSpan(clickableSpan, 8, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
 
         TextView textView = new TextView(this);
         textView.setText(R.string.rainbow);
@@ -87,7 +88,7 @@ public class SecondActivity extends AppCompatActivity {
         linLayout.addView(textView);
         textView.setText(ss);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-//        TextView textView = (TextView) findViewById(R.id.hello);
-//        textView.setHighlightColor(Color.TRANSPARENT);
+////        TextView textView = (TextView) findViewById(R.id.hello);
+////        textView.setHighlightColor(Color.TRANSPARENT);
     }
 }
