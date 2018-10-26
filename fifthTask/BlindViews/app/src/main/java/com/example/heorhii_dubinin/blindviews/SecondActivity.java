@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 public class SecondActivity extends AppCompatActivity {
 
-    public static final int SPANABLE_ORANGE = 0xffff9800;
-    public static final int SPANABLE_INDIGO = 0xff3949ab;
-    public static final int SPANABLE_VIOLET = 0xff9c27b0;
-    TextView textView;
+    public static final int SPANNABLE_ORANGE = 0xffff9800;
+    public static final int SPANNABLE_INDIGO = 0xff3949ab;
+    public static final int SPANNABLE_VIOLET = 0xff9c27b0;
+
+    TextView rainbowTextView;
+    TextView splashTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +37,32 @@ public class SecondActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams lpView = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        textView = new TextView(this);
-        textView.setText(R.string.rainbow);
-        textView.setLayoutParams(lpView);
-        linLayout.addView(textView);
+        rainbowTextView = new TextView(this);
+        rainbowTextView.setLayoutParams(lpView);
+        linLayout.addView(rainbowTextView);
 
-        final SpannableString spannableColor = new SpannableString(textView.getText());
+        splashTextView = new TextView(this);
+        splashTextView.setLayoutParams(lpView);
+        linLayout.addView(splashTextView);
+
+        magicString();
+    }
+
+    private void magicString() {
+
+        rainbowTextView.setText(R.string.rainbow);
+
+        final SpannableString spannableColor = new SpannableString(rainbowTextView.getText());
         spannableColor.setSpan(new ForegroundColorSpan(Color.RED), 25, 28, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableColor.setSpan(new ForegroundColorSpan(SPANABLE_ORANGE), 29, 36, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableColor.setSpan(new ForegroundColorSpan(SPANNABLE_ORANGE), 29, 36, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableColor.setSpan(new ForegroundColorSpan(Color.YELLOW), 38, 44, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableColor.setSpan(new ForegroundColorSpan(Color.GREEN), 46, 51, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableColor.setSpan(new ForegroundColorSpan(Color.BLUE), 53, 57, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableColor.setSpan(new ForegroundColorSpan(SPANABLE_INDIGO), 59, 65, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableColor.setSpan(new ForegroundColorSpan(SPANABLE_VIOLET), 67, 73, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textView.setText(spannableColor);
+        spannableColor.setSpan(new ForegroundColorSpan(SPANNABLE_INDIGO), 59, 65, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableColor.setSpan(new ForegroundColorSpan(SPANNABLE_VIOLET), 67, 73, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        rainbowTextView.setText(spannableColor);
 
-        SpannableString spannableString = new SpannableString(textView.getText());
+        SpannableString spannableString = new SpannableString(rainbowTextView.getText());
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -65,12 +77,13 @@ public class SecondActivity extends AppCompatActivity {
         };
         spannableString.setSpan(clickableSpan, 105, 117, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        textView.setText(spannableString);
+        rainbowTextView.setText(spannableString);
+        rainbowTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         SpannableString ss = new SpannableString("Show me Splash please.");
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
-            public void onClick(View textView) {
+            public void onClick(View splashTextView) {
                 startActivity(new Intent(SecondActivity.this, SplashActivity.class));
             }
 
@@ -80,15 +93,9 @@ public class SecondActivity extends AppCompatActivity {
                 ds.setUnderlineText(true);
             }
         };
-        ss.setSpan(clickableSpan, 8, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan2, 8, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        TextView textView = new TextView(this);
-        textView.setText(R.string.rainbow);
-        textView.setLayoutParams(lpView);
-        linLayout.addView(textView);
-        textView.setText(ss);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-////        TextView textView = (TextView) findViewById(R.id.hello);
-////        textView.setHighlightColor(Color.TRANSPARENT);
+        splashTextView.setText(ss);
+        splashTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }
