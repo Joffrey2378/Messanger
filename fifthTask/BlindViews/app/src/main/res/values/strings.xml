@@ -4,7 +4,7 @@
     <string name="add_elements">Add some elements</string>
     <string name="calculators">Show calculators</string>
     <string name="rainbow">7 Colors of the Rainbow: RED, ORANGE, YELLOW,  GREEN, BLUE, INDIGO, VIOLET.
-You can open calculator with: FrameLayout , LinearLayout, RelativeLayout.
+You can open calculator with: FrameLayout , LinearLayout, RelativeLayout, ConstraintLayout.
     </string>
     <string name="percent">%</string>
     <string name="zero">0</string>

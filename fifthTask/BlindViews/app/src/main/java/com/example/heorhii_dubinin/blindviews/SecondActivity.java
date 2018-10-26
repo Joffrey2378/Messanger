@@ -66,7 +66,7 @@ public class SecondActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(new Intent(SecondActivity.this, FrameLayoutActivity.class));
+                startActivity(new Intent(SecondActivity.this, CalculatorLayoutActivity.class));
             }
 
             @Override
