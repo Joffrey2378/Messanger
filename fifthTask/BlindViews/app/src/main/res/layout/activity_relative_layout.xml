@@ -10,10 +10,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:inputType="number" />
+        android:gravity="bottom|end"
+        android:hint="@string/zero"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:textSize="50sp" />
 
     <TextView
-        android:id="@+id/textView33"
+        android:id="@+id/percent_textView"
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_below="@+id/one_textView"
@@ -26,23 +30,23 @@
         android:text="@string/percent" />
 
     <TextView
-        android:id="@+id/textView34"
+        android:id="@+id/zero_textView"
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_below="@+id/two_textView"
         android:layout_margin="3dp"
         android:layout_marginStart="7dp"
-        android:layout_toEndOf="@+id/textView33"
+        android:layout_toEndOf="@+id/percent_textView"
         android:gravity="center"
         android:text="@string/zero" />
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/dot_textView"
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_below="@+id/three_textView"
         android:layout_margin="3dp"
-        android:layout_toEndOf="@+id/textView34"
+        android:layout_toEndOf="@+id/zero_textView"
         android:gravity="center"
         android:text="@string/dot" />
 
