@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FrameLayoutActivity">
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/editText3"
@@ -226,4 +224,5 @@
         android:gravity="center"
         android:text="@string/five" />
 
-</FrameLayout>
+
+</RelativeLayout>
