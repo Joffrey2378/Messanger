@@ -11,6 +11,9 @@ import android.widget.ProgressBar;
 public class SplashActivity extends AppCompatActivity {
 
     private static final int SPLASH_DELAY = 5000;
+    public static final int REVERSE_ROTATION = 200;
+    public static final int FORWARD_ROTATION = 300;
+    public static final int SPEED_ROTATION = 1000;
 
     private ProgressBar progressBar;
 
@@ -24,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     void animate3() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(progressBar, "rotation", 200, 0, 300);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(progressBar, "rotation", REVERSE_ROTATION, SPEED_ROTATION, FORWARD_ROTATION);
         objectAnimator.setDuration(SPLASH_DELAY);
         objectAnimator.addListener(new AnimatorListenerAdapter() {
             @Override

@@ -134,7 +134,6 @@ public class SecondActivity extends AppCompatActivity {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
                 ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
