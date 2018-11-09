@@ -20,6 +20,7 @@ public class SecondActivity extends AppCompatActivity {
     public static final int SPANNABLE_ORANGE = 0xffff9800;
     public static final int SPANNABLE_INDIGO = 0xff3949ab;
     public static final int SPANNABLE_VIOLET = 0xff9c27b0;
+    public static final int LINK_COLOR = 0xff2196f3;
 
     TextView rainbowTextView;
     TextView splashTextView;
@@ -68,12 +69,12 @@ public class SecondActivity extends AppCompatActivity {
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstance(SecondActivity.this, R.layout.activity_frame_layout));
+                startActivity(CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_frame_layout));
             }
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+                ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
         };
@@ -82,12 +83,12 @@ public class SecondActivity extends AppCompatActivity {
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstance(SecondActivity.this, R.layout.activity_linear_layout));
+                startActivity(CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_linear_layout));
             }
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+                ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
         };
@@ -96,12 +97,12 @@ public class SecondActivity extends AppCompatActivity {
         ClickableSpan clickableSpan3 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstance(SecondActivity.this, R.layout.activity_relative_layout));
+                startActivity(CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_relative_layout));
             }
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+                ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
         };
@@ -110,12 +111,12 @@ public class SecondActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstance(SecondActivity.this, R.layout.activity_constraint_layout));
+                startActivity(CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_constraint_layout));
             }
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+                ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
         };
@@ -133,7 +134,8 @@ public class SecondActivity extends AppCompatActivity {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+//                super.updateDrawState(ds);
+                ds.setColor(LINK_COLOR);
                 ds.setUnderlineText(true);
             }
         };

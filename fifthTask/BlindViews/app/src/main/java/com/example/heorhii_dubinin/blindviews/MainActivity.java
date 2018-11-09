@@ -66,13 +66,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-//    linearLayout.setOnTouchListener(new View.OnTouchListener() {
-//        @Override
-//        public boolean onTouch(View v, MotionEvent event) {
-//            Intent intent = new Intent(SecondActivity.this,SevenColorRainbowActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//            return true;
-//        }
-//    }
 }
