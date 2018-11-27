@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int GRAVITY = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,42 +25,40 @@ public class MainActivity extends AppCompatActivity {
 
         final ScrollView scrollView = new ScrollView(this);
 
-        final LinearLayout linLayout = new LinearLayout(this);
-        linLayout.setOrientation(LinearLayout.VERTICAL);
+        final LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        scrollView.addView(linLayout, linLayoutParam);
-        setContentView(scrollView, linLayoutParam);
+        scrollView.addView(linearLayout);
+        setContentView(scrollView);
 
-        LinearLayout.LayoutParams lpView = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        TextView helloMoonTextView = new TextView(this);
+        helloMoonTextView.setText(R.string.hello_moon);
+        helloMoonTextView.setGravity(GRAVITY);
+        helloMoonTextView.setPadding(20, 20, 20, 0);
+        linearLayout.addView(helloMoonTextView);
 
-        TextView tv = new TextView(this);
-        tv.setText(R.string.hello_moon);
-        tv.setLayoutParams(lpView);
-        linLayout.addView(tv);
-
-        final Button btn1 = new Button(this);
-        btn1.setText(R.string.calculators);
-        linLayout.addView(btn1, lpView);
-
-        btn1.setOnClickListener(new View.OnClickListener() {
+        final Button showCalcBtn = new Button(this);
+        showCalcBtn.setText(R.string.calculators);
+        linearLayout.addView(showCalcBtn);
+//
+        showCalcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SecondActivity.class));
             }
         });
 
-        Button btn2 = new Button(this);
-        btn2.setText(R.string.add_elements);
-        linLayout.addView(btn2, lpView);
+        Button addElementsBtn = new Button(this);
+        addElementsBtn.setText(R.string.add_elements);
+        linearLayout.addView(addElementsBtn);
 
-        btn2.setOnClickListener(new View.OnClickListener() {
+        addElementsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AsyncLayoutInflater asyncLayoutInflater = new AsyncLayoutInflater(getApplicationContext());   //Asynchronic adding
-                asyncLayoutInflater.inflate(R.layout.custom_activity, linLayout, new AsyncLayoutInflater.OnInflateFinishedListener() {
+                asyncLayoutInflater.inflate(R.layout.custom_activity, linearLayout, new AsyncLayoutInflater.OnInflateFinishedListener() {
                     @Override
-                    public void onInflateFinished(View view, int resid, ViewGroup parent) {     //adding custom_activity in linLayout
+                    public void onInflateFinished(View view, int resid, ViewGroup parent) {     //adding custom_activity in linearLayout
                         parent.addView(view);
                     }
                 });
