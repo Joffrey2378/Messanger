@@ -1,6 +1,5 @@
 package com.example.heorhii_dubinin.blindviews;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,52 +58,23 @@ public class SecondActivity extends AppCompatActivity {
         rainbowTextView.setText(spannableColor);
 
         SpannableString spannableString = new SpannableString(rainbowTextView.getText());
-        ClickMaker clickableSpan1 = new ClickMaker(this) {
-            @Override
-            public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstanceIntent(
-                        SecondActivity.this, R.layout.activity_frame_layout));
-            }
-        };
+        ClickMaker clickableSpan1 = new ClickMaker(this, CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_frame_layout));
         spannableString.setSpan(clickableSpan1, 105, 117, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ClickMaker clickableSpan2 = new ClickMaker(this) {
-            @Override
-            public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstanceIntent(
-                        SecondActivity.this, R.layout.activity_linear_layout));
-            }
-        };
+        ClickMaker clickableSpan2 = new ClickMaker(this, CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_linear_layout));
         spannableString.setSpan(clickableSpan2, 119, 131, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ClickMaker clickableSpan3 = new ClickMaker(this) {
-            @Override
-            public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstanceIntent(
-                        SecondActivity.this, R.layout.activity_relative_layout));
-            }
-        };
+        ClickMaker clickableSpan3 = new ClickMaker(this, CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_relative_layout));
         spannableString.setSpan(clickableSpan3, 133, 147, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ClickMaker clickableSpan4 = new ClickMaker(this) {
-            @Override
-            public void onClick(View textView) {
-                startActivity(CalculatorLayoutActivity.newInstanceIntent(
-                        SecondActivity.this, R.layout.activity_constraint_layout));
-            }
-        };
+        ClickMaker clickableSpan4 = new ClickMaker(this, CalculatorLayoutActivity.newInstanceIntent(SecondActivity.this, R.layout.activity_constraint_layout));
         spannableString.setSpan(clickableSpan4, 149, 165, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         rainbowTextView.setText(spannableString);
         rainbowTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         SpannableString ss = new SpannableString("Show me Splash please.");
-        ClickMaker clickableSpan2Test = new ClickMaker(this) {
-            @Override
-            public void onClick(View splashTextView) {
-                startActivity(new Intent(SecondActivity.this, SplashActivity.class));
-            }
-        };
+        ClickMaker clickableSpan2Test = new ClickMaker(this, SplashActivity.class);
         ss.setSpan(clickableSpan2Test, 8, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         splashTextView.setText(ss);
