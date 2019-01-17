@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">NestingDoll</string>
-    <string name="main_first_activity">Main/First Activity</string>
-    <string name="second_activity">Second Activity</string>
-    <string name="third_activity_click_to_send_an_e_mail">Third Activity.\nClick to send an e-mail</string>
-</resources>

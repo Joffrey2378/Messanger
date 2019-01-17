@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<rotate android:drawable="@drawable/ifmoonnewmoon"
-    android:fromDegrees="0"
-    android:toDegrees="300"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
