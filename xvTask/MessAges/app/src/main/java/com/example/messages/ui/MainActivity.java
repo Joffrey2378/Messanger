@@ -1,7 +1,9 @@
-package com.example.messages;
+package com.example.messages.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.messages.R;
 
 public class MainActivity extends AppCompatActivity {
 
