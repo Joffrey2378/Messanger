@@ -51,7 +51,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushMessage(View view) {
-        MessageModel messageModel = new MessageModel(null, textMessage.getText().toString(), userName, null);
+        MessageModel messageModel = new MessageModel(
+                null,
+                userName,
+                textMessage.getText().toString(),
+                null);
         messageReference.add(messageModel);
 
         textMessage.setText("");
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         Query query = messageReference
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .limit(50);
 
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions
