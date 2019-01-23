@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText textMessage;
     private Button btnSend;
     private Button btnLogOut;
+    private Button btnLocation;
 
     private String userName;
 
@@ -56,7 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnSend.setOnClickListener(this::pushMessage);
 
+        btnLocation.setOnClickListener(this::getLocationInfo);
+
         initializeAuthStateListener();
+    }
+
+    private void getLocationInfo(View view) {
+        Toast.makeText(this, "You are locating", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, BasicLocationActivity.class));
     }
 
     private void logOut(View view) {
@@ -134,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         textMessage = findViewById(R.id.message_editText);
         btnSend = findViewById(R.id.send_button);
         btnLogOut = findViewById(R.id.log_out);
+        btnLocation = findViewById(R.id.location);
         userName = USER_NAME;
     }
 
