@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         textMessage = findViewById(R.id.message_editText);
         btnSend = findViewById(R.id.send_button);
         btnLogOut = findViewById(R.id.log_out);
-        btnLocation = findViewById(R.id.location);
+        btnLocation = findViewById(R.id.test_button);
         userName = USER_NAME;
     }
 
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 userName,
                 textMessage.getText().toString(),
+                null,
                 null);
         messageReference.add(messageModel);
 

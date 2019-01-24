@@ -24,6 +24,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<MessageModel, Messa
 //        holder.imageView.
         holder.name.setText(model.getName());
         holder.message.setText(model.getMessage());
+        holder.location.setText(model.getLocation());
     }
 
     @NonNull
@@ -40,12 +41,14 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<MessageModel, Messa
         ImageView imageView;
         TextView name;
         TextView message;
+        TextView location;
 
         MessageHolder(@NonNull View itemView) {
             super(itemView);
 //            imageView = itemView.findViewById(R.id.photoImageView);
-            name = itemView.findViewById(R.id.nameTextView);
-            message = itemView.findViewById(R.id.messageTextView);
+            name = itemView.findViewById(R.id.name_text_view);
+            message = itemView.findViewById(R.id.message_text_view);
+            location = itemView.findViewById(R.id.location_text_view);
         }
     }
 }

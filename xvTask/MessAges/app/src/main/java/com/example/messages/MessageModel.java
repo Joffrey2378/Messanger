@@ -10,15 +10,17 @@ public class MessageModel {
     private String message;
     private String uid;
     private Date timestamp;
+    private String location;
 
     public MessageModel() {
     }
 
-    public MessageModel(String image, String name, String message, String uid) {
+    public MessageModel(String image, String name, String message, String uid, String location) {
         this.image = image;
         this.name = name;
         this.message = message;
         this.uid = uid;
+        this.location = location;
     }
 
     public String getName() {
@@ -60,5 +62,13 @@ public class MessageModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
