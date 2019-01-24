@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name" translatable="false">MessAges</string>
     <string name="send_button_label">Send</string>
     <string name="message_hint">Type your Mess</string>
     <string name="image_button_description">Button which adds image</string>

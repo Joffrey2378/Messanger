@@ -1,22 +1,35 @@
 package com.example.messages.ui;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.messages.BuildConfig;
 import com.example.messages.MessageModel;
 import com.example.messages.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,14 +37,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public static final String USER_NAME = "anonymous";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 1;
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference messageReference = db.collection("chat");
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
+    protected Location lastLocation;
+    private FusedLocationProviderClient fusedLocationClient;
 
     private MessageAdapter adapter;
 
@@ -41,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLocation;
 
     private String userName;
+    private String locationCoordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         editTextSetups();
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         btnLogOut.setOnClickListener(this::logOut);
 
         btnSend.setOnClickListener(this::pushMessage);
@@ -64,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getLocationInfo(View view) {
         Toast.makeText(this, "You are locating", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, BasicLocationActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private void logOut(View view) {
@@ -76,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
+
+        if (!checkPermissions()) {
+            requestPermissions();
+        } else {
+            getLastLocation();
+        }
     }
 
     @Override
@@ -151,8 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 userName,
                 textMessage.getText().toString(),
-                null,
-                null);
+                locationCoordinates);
         messageReference.add(messageModel);
 
         textMessage.setText("");
@@ -199,4 +225,88 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        fusedLocationClient.getLastLocation()
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        lastLocation = task.getResult();
+                        String latitude = String.format(Locale.ENGLISH, "%f", lastLocation.getLatitude());
+                        String longitude = String.format(Locale.ENGLISH, "%f", lastLocation.getLongitude());
+                        locationCoordinates = latitude + ", " + longitude;
+                    } else {
+                        Log.w(TAG, "getLastLocation:exception", task.getException());
+                        showSnackbar(getString(R.string.no_location_detected));
+                    }
+                });
+    }
+
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startLocationPermissionRequest() {
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+    }
+
+    private void showSnackbar(final String text) {
+        View container = findViewById(R.id.main_activity_container);
+        if (container != null) {
+            Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void showSnackbar(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(actionStringId), listener).show();
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale =
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (shouldProvideRationale) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+
+            showSnackbar(R.string.permission_rationale, android.R.string.ok,
+                    view -> startLocationPermissionRequest());
+
+        } else {
+            Log.i(TAG, "Requesting permission");
+            startLocationPermissionRequest();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionResult");
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length <= 0) {
+                Log.i(TAG, "User interaction was cancelled.");
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                showSnackbar(R.string.permission_denied_explanation, R.string.settings,
+                        view -> {
+                            Intent intent = new Intent();
+                            intent.setAction(
+                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        });
+            }
+        }
+    }
 }

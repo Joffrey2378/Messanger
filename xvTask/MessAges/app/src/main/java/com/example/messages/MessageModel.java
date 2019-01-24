@@ -8,18 +8,16 @@ public class MessageModel {
     private String image;
     private String name;
     private String message;
-    private String uid;
     private Date timestamp;
     private String location;
 
     public MessageModel() {
     }
 
-    public MessageModel(String image, String name, String message, String uid, String location) {
+    public MessageModel(String image, String name, String message, String location) {
         this.image = image;
         this.name = name;
         this.message = message;
-        this.uid = uid;
         this.location = location;
     }
 
@@ -37,14 +35,6 @@ public class MessageModel {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     @ServerTimestamp
