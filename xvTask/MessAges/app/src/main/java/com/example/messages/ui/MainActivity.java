@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,10 +45,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 1;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference messageReference = db.collection("chat");
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
+
     protected Location lastLocation;
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -56,10 +59,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText textMessage;
     private Button btnSend;
     private Button btnLogOut;
-    private Button btnLocation;
+    private Button btnTestLocation;
 
     private String userName;
     private String locationCoordinates;
+
+    private String userLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +83,24 @@ public class MainActivity extends AppCompatActivity {
 
         btnSend.setOnClickListener(this::pushMessage);
 
-        btnLocation.setOnClickListener(this::getLocationInfo);
+        btnTestLocation.setOnClickListener(this::getLocationInfo);
 
         initializeAuthStateListener();
     }
 
     private void getLocationInfo(View view) {
         Toast.makeText(this, "You are locating", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, MainActivity.class));
+
+        Uri.Builder directionsBuilder = new Uri.Builder()
+                .scheme("https")
+                .authority("www.google.com")
+                .appendPath("maps")
+                .appendPath("dir")
+                .appendPath("")
+                .appendQueryParameter("api", "1")
+                .appendQueryParameter("destination", locationCoordinates);
+
+        startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
     }
 
     private void logOut(View view) {
@@ -169,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         textMessage = findViewById(R.id.message_editText);
         btnSend = findViewById(R.id.send_button);
         btnLogOut = findViewById(R.id.log_out);
-        btnLocation = findViewById(R.id.test_button);
+        btnTestLocation = findViewById(R.id.test_button);
         userName = USER_NAME;
     }
 
@@ -178,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 userName,
                 textMessage.getText().toString(),
+                null,
                 locationCoordinates);
         messageReference.add(messageModel);
 
@@ -223,6 +239,32 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                userLocation = adapter.getLocationFieldFromFirebaseObject(
+                        viewHolder.getAdapterPosition());
+                Log.d(TAG, "onSwiped: userLocation " + userLocation);
+                Uri.Builder directionsBuilder = new Uri.Builder()
+                        .scheme("https")
+                        .authority("www.google.com")
+                        .appendPath("maps")
+                        .appendPath("dir")
+                        .appendPath("")
+                        .appendQueryParameter("api", "1")
+                        .appendQueryParameter("destination", userLocation);
+
+                startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @SuppressLint("MissingPermission")
