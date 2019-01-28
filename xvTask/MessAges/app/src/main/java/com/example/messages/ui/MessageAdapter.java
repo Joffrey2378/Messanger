@@ -39,6 +39,10 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<MessageModel, Messa
         return getSnapshots().getSnapshot(position).get("location").toString();
     }
 
+    void deleteItem(int position) {
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
     class MessageHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView message;

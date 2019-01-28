@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +39,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 1;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    public static final String HTTPS = "https";
+    public static final String AUTHORITY = "www.google.com";
+    public static final String SEGMENT = "maps";
+    public static final String NEW_SEGMENT = "dir";
+    public static final String API = "api";
+    public static final String VALUE = "1";
+    public static final String DESTINATION = "destination";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference messageReference = db.collection("chat");
@@ -62,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnTestLocation;
 
     private String userName;
+    private double latitude;
+    private double longitude;
     private String locationCoordinates;
 
     private String userLocation;
@@ -92,13 +105,13 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "You are locating", Toast.LENGTH_SHORT).show();
 
         Uri.Builder directionsBuilder = new Uri.Builder()
-                .scheme("https")
-                .authority("www.google.com")
-                .appendPath("maps")
-                .appendPath("dir")
+                .scheme(HTTPS)
+                .authority(AUTHORITY)
+                .appendPath(SEGMENT)
+                .appendPath(NEW_SEGMENT)
                 .appendPath("")
-                .appendQueryParameter("api", "1")
-                .appendQueryParameter("destination", locationCoordinates);
+                .appendQueryParameter(API, VALUE)
+                .appendQueryParameter(DESTINATION, locationCoordinates);
 
         startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
     }
@@ -185,16 +198,18 @@ public class MainActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.send_button);
         btnLogOut = findViewById(R.id.log_out);
         btnTestLocation = findViewById(R.id.test_button);
+//        exactAddress = getAddress(latitude, longitude);
         userName = USER_NAME;
     }
 
     private void pushMessage(View view) {
+        String exactAddress = getAddress(latitude, longitude);
         MessageModel messageModel = new MessageModel(
                 null,
                 userName,
                 textMessage.getText().toString(),
                 null,
-                locationCoordinates);
+                exactAddress);
         messageReference.add(messageModel);
 
         textMessage.setText("");
@@ -209,11 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    btnSend.setEnabled(true);
-                } else {
-                    btnSend.setEnabled(false);
-                }
+                btnSend.setEnabled(charSequence.toString().trim().length() > 0);
             }
 
             @Override
@@ -240,6 +251,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerView);
+
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
@@ -265,22 +290,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
             }
         }).attachToRecyclerView(recyclerView);
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        fusedLocationClient.getLastLocation()
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        lastLocation = task.getResult();
-                        String latitude = String.format(Locale.ENGLISH, "%f", lastLocation.getLatitude());
-                        String longitude = String.format(Locale.ENGLISH, "%f", lastLocation.getLongitude());
-                        locationCoordinates = latitude + ", " + longitude;
-                    } else {
-                        Log.w(TAG, "getLastLocation:exception", task.getException());
-                        showSnackbar(getString(R.string.no_location_detected));
-                    }
-                });
     }
 
     private boolean checkPermissions() {
@@ -327,6 +336,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        fusedLocationClient.getLastLocation()
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        lastLocation = task.getResult();
+                        latitude = Double.parseDouble(String.format(Locale.ENGLISH, "%f", lastLocation.getLatitude()));
+                        longitude = Double.parseDouble(String.format(Locale.ENGLISH, "%f", lastLocation.getLongitude()));
+                        locationCoordinates = latitude + ", " + longitude;
+                    } else {
+                        Log.w(TAG, "getLastLocation:exception", task.getException());
+                        showSnackbar(getString(R.string.no_location_detected));
+                    }
+                });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -350,5 +375,24 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         }
+    }
+
+    private String getAddress(double latitude, double longitude) {
+        StringBuilder result = new StringBuilder();
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                result.append(address.getSubThoroughfare()).append(", ");
+//                result.append(address.getFeatureName()).append(", ");
+                result.append(address.getLocality()).append(", ");
+//                result.append(address.getCountryName());
+            }
+        } catch (IOException e) {
+            Log.e("tag", e.getMessage());
+        }
+
+        return result.toString();
     }
 }
