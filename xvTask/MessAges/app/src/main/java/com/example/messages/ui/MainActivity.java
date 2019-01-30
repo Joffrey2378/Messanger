@@ -49,13 +49,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 1;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    public static final String HTTPS = "https";
-    public static final String AUTHORITY = "www.google.com";
-    public static final String SEGMENT = "maps";
-    public static final String NEW_SEGMENT = "dir";
-    public static final String API = "api";
-    public static final String VALUE = "1";
-    public static final String DESTINATION = "destination";
+    public static final String PATH_HTTPS = "https";
+    public static final String PATH_AUTHORITY = "www.google.com";
+    public static final String PATH_SEGMENT = "maps";
+    public static final String PATH_NEW_SEGMENT = "dir";
+    public static final String QUERY_PARAMETER_API = "api";
+    public static final String QUERY_PARAMETER_VALUE = "1";
+    public static final String QUERY_PARAMETER_DESTINATION = "destination";
+    public static final String PARAMETER_QUERY = "query";
+    public static final String PATH_SEARCH = "search";
+    public static final String EMPTY_STRING = "";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference messageReference = db.collection("chat");
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private String userName;
     private double latitude;
     private double longitude;
+    String exactAddress;
     private String locationCoordinates;
 
     private String userLocation;
@@ -105,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "You are locating", Toast.LENGTH_SHORT).show();
 
         Uri.Builder directionsBuilder = new Uri.Builder()
-                .scheme(HTTPS)
-                .authority(AUTHORITY)
-                .appendPath(SEGMENT)
-                .appendPath(NEW_SEGMENT)
-                .appendPath("")
-                .appendQueryParameter(API, VALUE)
-                .appendQueryParameter(DESTINATION, locationCoordinates);
+                .scheme(PATH_HTTPS)
+                .authority(PATH_AUTHORITY)
+                .appendPath(PATH_SEGMENT)
+                .appendPath(PATH_NEW_SEGMENT)
+                .appendPath(EMPTY_STRING)
+                .appendQueryParameter(QUERY_PARAMETER_API, QUERY_PARAMETER_VALUE)
+                .appendQueryParameter(QUERY_PARAMETER_DESTINATION, locationCoordinates);
 
         startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
     }
@@ -198,12 +202,11 @@ public class MainActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.send_button);
         btnLogOut = findViewById(R.id.log_out);
         btnTestLocation = findViewById(R.id.test_button);
-//        exactAddress = getAddress(latitude, longitude);
         userName = USER_NAME;
     }
 
     private void pushMessage(View view) {
-        String exactAddress = getAddress(latitude, longitude);
+        exactAddress = getAddress(latitude, longitude);
         MessageModel messageModel = new MessageModel(
                 null,
                 userName,
@@ -279,13 +282,13 @@ public class MainActivity extends AppCompatActivity {
                         viewHolder.getAdapterPosition());
                 Log.d(TAG, "onSwiped: userLocation " + userLocation);
                 Uri.Builder directionsBuilder = new Uri.Builder()
-                        .scheme("https")
-                        .authority("www.google.com")
-                        .appendPath("maps")
-                        .appendPath("dir")
-                        .appendPath("")
-                        .appendQueryParameter("api", "1")
-                        .appendQueryParameter("destination", userLocation);
+                        .scheme(PATH_HTTPS)
+                        .authority(PATH_AUTHORITY)
+                        .appendPath(PATH_SEGMENT)
+                        .appendPath(PATH_SEARCH)
+                        .appendPath(EMPTY_STRING)
+                        .appendQueryParameter(QUERY_PARAMETER_API, QUERY_PARAMETER_VALUE)
+                        .appendQueryParameter(PARAMETER_QUERY, userLocation);
 
                 startActivity(new Intent(Intent.ACTION_VIEW, directionsBuilder.build()));
             }
