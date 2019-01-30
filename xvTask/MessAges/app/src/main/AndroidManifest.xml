@@ -14,9 +14,13 @@
         android:theme="@style/Theme.Design.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <service
-            android:name=".MyFirebaseService"
+            android:name=".MyJobService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".MyFirebaseService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".ui.MainActivity">
             <intent-filter>
