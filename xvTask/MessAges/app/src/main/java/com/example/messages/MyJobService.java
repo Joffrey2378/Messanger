@@ -1,10 +1,12 @@
 package com.example.messages;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
+@SuppressLint("Registered")
 public class MyJobService extends JobService {
     private static final String TAG = "MyJobService";
 

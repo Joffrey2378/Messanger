@@ -28,10 +28,10 @@
         This is the name that users will see when interacting with this channel.
         It should describe the category of notifications that will be sent through this channel
      -->
-    <string name="default_notification_channel_name" translatable="true">Weather</string>
-    <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
+    <string name="default_notification_channel_name" translatable="true">Messages</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to messages topic</string>
     <string name="fcm_message">FCM Message</string>
 
-    <string name="msg_subscribed">Subscribed to weather topic</string>
+    <string name="msg_subscribed">Subscribed to messages topic</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 </resources>

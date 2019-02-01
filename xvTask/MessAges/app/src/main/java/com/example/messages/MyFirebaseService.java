@@ -12,9 +12,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.messages.ui.MainActivity;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -28,16 +25,13 @@ public class MyFirebaseService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if ( true) {
-                scheduleJob();
-            } else {
-                handleNow();
-            }
-
         }
 
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.d(TAG, "Message Notification Body: " + remoteMessage
+                    .getNotification()
+                    .getBody());
+            sendNotification(remoteMessage.getNotification().getBody());
         }
     }
 
@@ -48,26 +42,14 @@ public class MyFirebaseService extends FirebaseMessagingService {
         sendRegistrationToServer(token);
     }
 
-    private void scheduleJob() {
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-        Job myJob = dispatcher.newJobBuilder()
-                .setService(MyJobService.class)
-                .setTag("my-job-tag")
-                .build();
-        dispatcher.schedule(myJob);
-    }
-
-    private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
-    }
-
     private void sendRegistrationToServer(String token) {
     }
 
     private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent
+                .getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);
