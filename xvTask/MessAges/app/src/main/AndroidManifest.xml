@@ -22,7 +22,7 @@
             android:resource="@color/colorAccent" />
 
         <service
-            android:name=".MyFirebaseService"
+            android:name=".FirebaseNotificationService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
